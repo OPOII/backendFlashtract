@@ -17,8 +17,9 @@ public class Vendor {
     private double ratePerHour;
     private String location;
     private String description;
+    /**@OneToMany(targetEntity=Vendor.class, mappedBy="Invoice", fetch=FetchType.EAGER)
     private List<Invoice> contracts;
-
+*/
 }
 
 

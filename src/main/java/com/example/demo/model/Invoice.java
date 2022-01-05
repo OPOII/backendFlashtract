@@ -15,7 +15,9 @@ public class Invoice {
     private double value;
     private Date createdDate;
     private String status;
+    /**
     private Vendor vendorAssociated;
+     */
     private String description;
 
 }
