@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
@@ -20,24 +21,21 @@ public class Invoice implements Serializable {
     @JsonIgnore
     private Long id;
     @Column
-    @NotNull
     private double totalValue;
     @Column
-    @NotNull
-    private double hoursWorked;
+    private int hoursWorked;
     //Change the way to numbers ddmmyyhms
     @Column
     @NotNull
     private Date createdDate;
     @Column
-    @NotNull
     private String status;
     @ManyToOne
     @JoinColumn(name ="vendor_id",nullable=false)
     @JsonIgnore
     private Vendor vendor;
     @Column
-    @NotNull
+    @NotBlank
     private String description;
     @Column
     @NotNull
@@ -69,7 +67,7 @@ public class Invoice implements Serializable {
         return hoursWorked;
     }
 
-    public void setHoursWorked(double hoursWorked) {
+    public void setHoursWorked(int hoursWorked) {
         this.hoursWorked = hoursWorked;
     }
 

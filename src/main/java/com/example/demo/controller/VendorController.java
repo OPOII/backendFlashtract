@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.model.Invoice;
 import com.example.demo.model.Vendor;
 import com.example.demo.service.VendorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,15 @@ public class VendorController {
     @PutMapping
     public ResponseEntity<Vendor> editContract(@RequestBody Vendor vendor) throws Exception {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(service.update(vendor));
+    }
+
+    @PostMapping(value="/{id}/createInvoice")
+    public ResponseEntity<Invoice>createInvoice(@RequestBody Invoice invoice, @RequestParam Long idVendor)throws Exception{
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(service.createInvoice(invoice,idVendor));
+        }catch (Exception e){
+            throw new Exception(e.getLocalizedMessage());
+        }
     }
 
 }

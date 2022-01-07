@@ -30,15 +30,9 @@ public class InvoiceServiceImpl implements InvoiceService{
     }
 
     @Override
-    public Invoice save(Invoice invoice, Long idVendor)throws Exception {
+    public Invoice save(Invoice invoice)throws Exception {
 
         try {
-            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-            String tracker=formatter.format(invoice.getCreatedDate());
-            invoice.setTrackSerial(tracker);
-            Vendor owner=vendorRepo.findById(idVendor).get();
-            owner.addInvoice(invoice);
-            invoice.setVendor(owner);
             return repository.save(invoice);
         }catch (Exception e) {
             throw new Exception("Something get wrong");
