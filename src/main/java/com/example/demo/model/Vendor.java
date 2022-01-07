@@ -18,6 +18,7 @@ public class Vendor implements Serializable {
     @SequenceGenerator(name="VENDOR_ID_GENERATOR", sequenceName="VENDOR_SEQ")
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "VENDOR_ID_GENERATOR")
     @Column
+    @JsonIgnore
     private Long id;
     @Column
     private String name;

@@ -13,13 +13,13 @@ import java.util.List;
 @Entity
 @Data
 @Table(name="CONTRACT")
-@NotNull
 public class Contract implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @SequenceGenerator(name="CONTRACT_ID_GENERATOR", sequenceName="CONTRACT_SEQ")
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "CONTRACT_ID_GENERATOR")
     @Column
+    @JsonIgnore
     private Long id;
     @Column
     @NotNull
@@ -32,15 +32,20 @@ public class Contract implements Serializable {
     private String description;
     @Column
     @NotNull
+    private String terms;
+    @Column
+    @NotNull
     private Date createdDate;
     @Column
     @NotNull
     private Date finishedDate;
+
     @ManyToOne
-    @JoinColumn(name ="client_id",nullable = false)
+    @JoinColumn(name ="client_id")
+    @JsonIgnore
     private Client client;
     @ManyToOne
-    @JoinColumn(name ="vendor_id",nullable=false)
+    @JoinColumn(name ="vendor_id")
     @JsonIgnore
     private Vendor vendor;
     @Column
@@ -49,6 +54,7 @@ public class Contract implements Serializable {
     private List<String>reports;
 
     public Contract(){
+
         this.reports=new ArrayList<>();
     }
 

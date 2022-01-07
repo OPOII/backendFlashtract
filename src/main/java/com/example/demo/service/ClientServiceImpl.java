@@ -2,7 +2,10 @@ package com.example.demo.service;
 
 import com.example.demo.model.Client;
 import com.example.demo.model.Contract;
+import com.example.demo.model.Vendor;
 import com.example.demo.repository.IClientRepository;
+import com.example.demo.repository.IContractRepository;
+import com.example.demo.repository.IVendorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +22,12 @@ public class ClientServiceImpl implements ClientService{
     @Autowired
     private IClientRepository repository;
 
+    @Autowired
+    private IContractRepository contractRepository;
+
+    @Autowired
+    private IVendorRepository vendorRepository;
+
 
     @Override
     public Page<Client> findAll(Integer page, Integer size,Boolean enablePagination) {
@@ -26,7 +35,7 @@ public class ClientServiceImpl implements ClientService{
     }
     @Override
     public Client save(Client client) throws Exception {
-        if(client.getId()!=null && client!=null){
+        if(client!=null){
            return repository.save(client);
         }else{
             throw new Exception("Client can't be null");
@@ -55,8 +64,8 @@ public class ClientServiceImpl implements ClientService{
     @Override
     public List<Contract> getContracts(Long id) {
 
-        Optional<Client> actual=repository.findById(id);
-        return actual.get().getContracts();
+        Client actual=repository.findById(id).get();
+        return actual.getContracts();
 
     }
     @Override
@@ -78,6 +87,24 @@ public class ClientServiceImpl implements ClientService{
     @Override
     public boolean existById(Long id) {
         return repository.existsById(id);
+    }
+
+    @Override
+    public Contract createContract(Contract contract, Long vendorID, Long clientID)throws Exception {
+        try{
+            Vendor vendor=vendorRepository.findById(vendorID).get();
+            Client client=repository.findById(clientID).get();
+            contract.setVendor(vendor);
+            contract.setClient(client);
+
+            vendor.addContract(contract);
+
+            client.addContract(contract);
+
+           return contractRepository.save(contract);
+        }catch (Exception e){
+            throw new Exception("Something went wrong");
+        }
     }
 
 

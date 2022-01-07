@@ -21,4 +21,5 @@ public interface ClientService {
     public Contract searchContractById(Long id);
     public Contract searchContractByDate(Long idClient,Date date);
     public boolean existById(Long id);
+    public Contract createContract(Contract contract, Long vendorID, Long clientID)throws Exception;
 }

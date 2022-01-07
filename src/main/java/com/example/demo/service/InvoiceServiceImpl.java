@@ -25,8 +25,8 @@ public class InvoiceServiceImpl implements InvoiceService{
     private IVendorRepository vendorRepo;
 
     @Override
-    public Page<Invoice> findAll(Integer page, Integer size, Boolean enablePagination) {
-        return repository.findAll(enablePagination? PageRequest.of(page,size): Pageable.unpaged());
+    public Iterable<Invoice> findAll() {
+        return repository.findAll();
     }
 
     @Override
@@ -63,8 +63,8 @@ public class InvoiceServiceImpl implements InvoiceService{
     }
 
     @Override
-    public Optional<Invoice> findById(Long id) {
-        Optional<Invoice> invoice=repository.findById(id);
+    public Invoice findById(Long id) {
+        Invoice invoice=repository.findById(id).get();
         return invoice;
     }
 

@@ -8,11 +8,11 @@ import java.util.Optional;
 
 public interface InvoiceService {
 
-    public Page<Invoice> findAll(Integer page, Integer size, Boolean enablePagination);
+    public Iterable<Invoice> findAll();
     public Invoice save(Invoice invoice, Long idVendor)throws Exception;
     public Invoice update(Invoice invoice)throws Exception;
     public void delete(Long id);
-    public Optional<Invoice> findById(Long id);
+    public Invoice findById(Long id);
     public boolean existById(Long id);
     public Vendor getVendorByID(Long id)throws Exception;
 

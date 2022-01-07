@@ -50,7 +50,7 @@ public class VendorController {
 
     @PutMapping
     public ResponseEntity<Vendor> editContract(@RequestBody Vendor vendor) throws Exception {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.update(vendor));
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(service.update(vendor));
     }
 
 }

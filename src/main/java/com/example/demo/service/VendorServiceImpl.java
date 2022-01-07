@@ -33,6 +33,7 @@ public class VendorServiceImpl implements VendorService {
     @Override
     public Vendor update(Vendor vendor) throws Exception {
         try {
+
             return repository.save(vendor);
         }catch (Error e){
             throw  new Exception("Something get wrong");

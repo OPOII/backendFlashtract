@@ -24,11 +24,19 @@ public class ContractServiceImpl implements ContractService{
 
     @Override
     public Contract save(Contract contract) throws Exception{
-        if(contract!=null && contract.getId()!=null){
-           return repository.save(contract);
-        }else{
-            throw new Exception("Contract can't be null");
+
+        try {
+            boolean validate=validateContractData(contract);
+            if(validate){
+                return repository.save(contract);
+            }else{
+                throw new Exception("There is missing data or you input wrong data");
+            }
+
+        }catch (Exception e) {
+            throw new Exception(e.getLocalizedMessage());
         }
+
     }
 
     @Override
@@ -64,4 +72,13 @@ public class ContractServiceImpl implements ContractService{
         return repository.existsById(id);
     }
 
+    public boolean validateContractData(Contract contract){
+        boolean validate=false;
+        if(Double.valueOf(contract.getMaxValue())!=null && contract.getMaxValue()>0 &&
+        contract.getDescription()!=null && !contract.getDescription().isEmpty() && contract.getCreatedDate()!=null
+                && contract.getFinishedDate()!=null){
+        validate=true;
+        }
+        return validate;
+    }
 }

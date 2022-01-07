@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 @Entity
@@ -16,22 +17,30 @@ public class Invoice implements Serializable {
     @SequenceGenerator(name="INVOICE_ID_GENERATOR", sequenceName="INVOICE_SEQ")
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "INVOICE_ID_GENERATOR")
     @Column
+    @JsonIgnore
     private Long id;
     @Column
-    private double value;
-
+    @NotNull
+    private double totalValue;
+    @Column
+    @NotNull
+    private double hoursWorked;
     //Change the way to numbers ddmmyyhms
     @Column
+    @NotNull
     private Date createdDate;
     @Column
+    @NotNull
     private String status;
     @ManyToOne
     @JoinColumn(name ="vendor_id",nullable=false)
     @JsonIgnore
     private Vendor vendor;
     @Column
+    @NotNull
     private String description;
     @Column
+    @NotNull
     private String trackSerial;
 
     public Invoice(){
@@ -48,12 +57,20 @@ public class Invoice implements Serializable {
         this.id = id;
     }
 
-    public double getValue() {
-        return value;
+    public double getTotalValue() {
+        return totalValue;
     }
 
-    public void setValue(double value) {
-        this.value = value;
+    public void setTotalValue(double totalValue) {
+        this.totalValue = totalValue;
+    }
+
+    public double getHoursWorked() {
+        return hoursWorked;
+    }
+
+    public void setHoursWorked(double hoursWorked) {
+        this.hoursWorked = hoursWorked;
     }
 
     public Date getCreatedDate() {

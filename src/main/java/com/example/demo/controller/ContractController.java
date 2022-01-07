@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.Client;
 import com.example.demo.model.Contract;
 import com.example.demo.service.ContractService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +19,13 @@ public class ContractController {
     private ContractService service;
 
     @PostMapping
-    public ResponseEntity<Contract> saveContract(@RequestBody Contract client) throws Exception {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(client));
+    public ResponseEntity<Contract> save(@RequestBody Contract contract) throws Exception {
+        System.out.println(contract.getClient());
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(contract));
     }
 
     @GetMapping
-    public ResponseEntity<Page<Contract>> getAllClients(
+    public ResponseEntity<Page<Contract>> findAll(
             @RequestParam(required = false, defaultValue = "0") Integer page,
             @RequestParam(required = false, defaultValue = "10")Integer size,
             @RequestParam(required = false, defaultValue = "false")Boolean enablePagination){
@@ -45,7 +45,7 @@ public class ContractController {
     }
 
     @PutMapping
-    public ResponseEntity<Contract> editContract(@RequestBody Contract contract) throws Exception {
+    public ResponseEntity<Contract> update(@RequestBody Contract contract) throws Exception {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.update(contract));
     }
 

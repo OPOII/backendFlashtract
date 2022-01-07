@@ -11,20 +11,30 @@ import java.util.List;
 @Entity
 @Data
 @Table(name="CLIENT")
-@NotNull
 public class Client implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @SequenceGenerator(name="CLIENT_ID_GENERATOR", sequenceName="CLIENT_SEQ")
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "CLIENT_ID_GENERATOR")
     @Column
+    @JsonIgnore
     private Long id;
 
     @NotNull
     @Column
     private String name;
 
+    @NotNull
+    @Column
+    private String secondName;
 
+    @NotNull
+    @Column
+    private String company;
+
+    @NotNull
+    @Column
+    private int professionalCard;
     @OneToMany(targetEntity = Contract.class,mappedBy="client")
     @JsonIgnore
     private List<Contract> contracts;
@@ -65,4 +75,27 @@ public class Client implements Serializable {
     }
 
 
+    public String getSecondName() {
+        return secondName;
+    }
+
+    public void setSecondName(String secondName) {
+        this.secondName = secondName;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public int getProfessionalCard() {
+        return professionalCard;
+    }
+
+    public void setProfessionalCard(int professionalCard) {
+        this.professionalCard = professionalCard;
+    }
 }
