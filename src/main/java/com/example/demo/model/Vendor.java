@@ -15,7 +15,8 @@ public class Vendor implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name="VENDOR_ID_GENERATOR", sequenceName="VENDOR_SEQ")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "VENDOR_ID_GENERATOR")
     @Column
     private Long id;
     @Column

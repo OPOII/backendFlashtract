@@ -21,7 +21,6 @@ public class ContractController {
 
     @PostMapping
     public ResponseEntity<Contract> saveContract(@RequestBody Contract client) throws Exception {
-
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(client));
     }
 
@@ -46,7 +45,7 @@ public class ContractController {
     }
 
     @PutMapping
-    public ResponseEntity<Contract> edithContract(@RequestBody Contract contract) throws Exception {
+    public ResponseEntity<Contract> editContract(@RequestBody Contract contract) throws Exception {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.update(contract));
     }
 

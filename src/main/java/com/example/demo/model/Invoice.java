@@ -13,7 +13,8 @@ public class Invoice implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name="INVOICE_ID_GENERATOR", sequenceName="INVOICE_SEQ")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "INVOICE_ID_GENERATOR")
     @Column
     private Long id;
     @Column
@@ -94,4 +95,5 @@ public class Invoice implements Serializable {
     public void setTrackSerial(String trackSerial) {
         this.trackSerial = trackSerial;
     }
+
 }

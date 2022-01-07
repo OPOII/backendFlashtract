@@ -3,16 +3,12 @@ package com.example.demo.service;
 import com.example.demo.model.Client;
 import com.example.demo.model.Contract;
 import com.example.demo.repository.IClientRepository;
-import com.example.demo.repository.IContractRepository;
-import com.example.demo.repository.IVendorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +25,7 @@ public class ClientServiceImpl implements ClientService{
         return repository.findAll(enablePagination? PageRequest.of(page,size): Pageable.unpaged());
     }
     @Override
-    public Client save(@Valid Client client) throws Exception {
+    public Client save(Client client) throws Exception {
         if(client.getId()!=null && client!=null){
            return repository.save(client);
         }else{
@@ -40,9 +36,7 @@ public class ClientServiceImpl implements ClientService{
     @Override
     public Client update(Client client) throws Exception {
         if(client.getId() !=null &&  repository.existsById(client.getId())){
-            Client actual=repository.findById(client.getId()).get();
-            actual=client;
-          return  repository.save(actual);
+          return  repository.save(client);
         }else{
             throw new Exception("Something got wrong while updating client");
         }

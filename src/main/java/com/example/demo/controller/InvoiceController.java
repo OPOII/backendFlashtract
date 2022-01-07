@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Invoice;
+import com.example.demo.model.Vendor;
 import com.example.demo.service.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,9 +19,9 @@ public class InvoiceController {
     private InvoiceService service;
 
     @PostMapping
-    public ResponseEntity<Invoice> saveClient(@RequestBody Invoice client) throws Exception {
+    public ResponseEntity<Invoice> saveInvoice(@RequestBody Invoice invoice, @RequestParam Long idVendor) throws Exception {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(client));
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(invoice,idVendor));
     }
     @GetMapping
     public ResponseEntity<Page<Invoice>> getAllClients(
@@ -47,5 +48,10 @@ public class InvoiceController {
     public ResponseEntity<Invoice> editInvoice(@RequestBody Invoice invoice) throws Exception {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(service.update(invoice));
+    }
+
+    @GetMapping(value = "/vendor/{id}")
+    public ResponseEntity<Vendor> findContractVendor(@RequestParam Long id)throws Exception{
+       return ResponseEntity.status(HttpStatus.OK).body(service.getVendorByID(id));
     }
 }
