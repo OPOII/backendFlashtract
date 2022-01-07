@@ -2,7 +2,6 @@ package com.example.demo.service;
 
 import com.example.demo.model.Client;
 import com.example.demo.model.Contract;
-import com.example.demo.model.Vendor;
 import com.example.demo.repository.IClientRepository;
 import com.example.demo.repository.IContractRepository;
 import com.example.demo.repository.IVendorRepository;
@@ -24,18 +23,25 @@ public class ClientServiceImpl implements ClientService{
 
     @Override
     public Iterable<Client> findAll() {
-        return null;
+        return repository.findAll();
     }
     @Override
-    public void save(@Valid Client client) {
+    public Client save(@Valid Client client) throws Exception {
         if(client.getId()!=null && client!=null){
-            repository.save(client);
+           return repository.save(client);
+        }else{
+            throw new Exception("Client can't be null");
         }
+
     }
     @Override
-    public void update(Client client) {
+    public Client update(Client client) throws Exception {
         if(client.getId() !=null &&  repository.existsById(client.getId())){
-            repository.save(client);
+            Client actual=repository.findById(client.getId()).get();
+            actual=client;
+          return  repository.save(actual);
+        }else{
+            throw new Exception("Something got wrong while updating client");
         }
     }
     @Override
@@ -58,8 +64,8 @@ public class ClientServiceImpl implements ClientService{
     }
     @Override
     public Contract searchContractById(Long id) {
-        Optional<Client>actual=repository.findById(id);
-        List<Contract> list=actual.get().getContracts();
+        Client actual=repository.findById(id).get();
+        List<Contract> list=actual.getContracts();
         Contract filter= (Contract) list.stream().filter(contract->contract.getId()==id);
         return filter;
 

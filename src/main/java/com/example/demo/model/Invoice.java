@@ -29,16 +29,16 @@ public class Invoice implements Serializable {
     @Column
     private String description;
     @Column
-    private double truckNumber;
+    private String trackSerial;
 
     public Invoice(){
 
     }
 
-    public Invoice(Long id, double value, Date createdDate, String status, String description) {
+    public Invoice(Long id, double value, String status, String description) {
         this.id = id;
         this.value = value;
-        this.createdDate = createdDate;
+        this.createdDate = new Date();
         this.status = status;
         this.description = description;
     }

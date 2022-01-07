@@ -12,8 +12,8 @@ import java.util.Optional;
 public interface ClientService {
 
     public Iterable<Client> findAll();
-    public void save(Client client);
-    public void update(Client client);
+    public Client save(Client client) throws Exception;
+    public Client update(Client client)throws Exception;
     public void delete(Long id);
     public Client findById(Long id);
     public List<Contract> getContracts(Long id);

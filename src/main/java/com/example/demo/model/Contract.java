@@ -5,7 +5,10 @@ import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 @Entity
 @Data
 @Table(name="CONTRACT")
@@ -37,6 +40,8 @@ public class Contract implements Serializable {
     @ManyToOne
     @JoinColumn(name ="vendor_id",nullable=false)
     private Vendor vendor;
+    @Column
+    private List<String>reports;
 
     public Contract(){
 
@@ -48,6 +53,7 @@ public class Contract implements Serializable {
         this.maxValue = maxValue;
         this.createdDate = createdDate;
         this.finishedDate = finishedDate;
+        this.reports = new ArrayList<>();
     }
 
     public Long getId() {

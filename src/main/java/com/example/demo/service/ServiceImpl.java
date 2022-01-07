@@ -49,6 +49,8 @@ public class ServiceImpl implements IService {
         vendor.getContracts().add(contract);
         client.getContracts().add(contract);
 
+        contractRepository.save(contract);
+
     }
 
     @Override
