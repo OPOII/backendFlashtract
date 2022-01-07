@@ -3,23 +3,33 @@ package com.example.demo.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Date;
 @Entity
 @Data
 @Table(name="CONTRACT")
-public class Contract {
-
+@NotNull
+public class Contract implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
     private Long id;
     @Column
+    @NotNull
     private String name;
     @Column
+    @NotNull
     private double maxValue;
     @Column
+    @NotNull
+    private String description;
+    @Column
+    @NotNull
     private Date createdDate;
     @Column
+    @NotNull
     private Date finishedDate;
     @ManyToOne
     @JoinColumn(name ="client_id",nullable = false)
@@ -32,14 +42,12 @@ public class Contract {
 
     }
 
-    public Contract(Long id, String name, double maxValue, Date createdDate, Date finishedDate, Client client, Vendor vendor) {
+    public Contract(Long id, String name, double maxValue, Date createdDate, Date finishedDate) {
         this.id = id;
         this.name = name;
         this.maxValue = maxValue;
         this.createdDate = createdDate;
         this.finishedDate = finishedDate;
-        this.client = client;
-        this.vendor = vendor;
     }
 
     public Long getId() {

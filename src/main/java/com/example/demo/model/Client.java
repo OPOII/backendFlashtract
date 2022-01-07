@@ -4,27 +4,36 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 @Entity
 @Data
 @Table(name="CLIENT")
-public class Client {
+@NotNull
+public class Client implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
     private Long id;
+
+    @NotNull
     @Column
     private String name;
+
+
     @OneToMany(targetEntity = Contract.class,mappedBy="client")
     private List<Contract> contracts;
     public Client(){
 
     }
 
-    public Client(Long id, String name, String description, List<Contract> contracts) {
+    public Client(Long id, String name, String description) {
         this.id = id;
         this.name = name;
-        this.contracts = contracts;
+        this.contracts = new ArrayList<Contract>();
     }
 
     public Long getId() {

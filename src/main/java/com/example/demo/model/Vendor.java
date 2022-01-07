@@ -4,12 +4,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Data
 @Table(name="VENDOR")
-public class Vendor {
+public class Vendor implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,6 +25,8 @@ public class Vendor {
     @Column
     private String location;
     @Column
+    private String dni;
+    @Column
     private String description;
     @OneToMany(targetEntity=Contract.class, mappedBy="vendor")
     private List<Contract>contracts;
@@ -32,14 +37,14 @@ public class Vendor {
 
     }
 
-    public Vendor(Long id, String name, double ratePerHour, String location, String description, List<Contract> contracts, List<Invoice> invoices) {
+    public Vendor(Long id, String name, double ratePerHour, String location, String description) {
         this.id = id;
         this.name = name;
         this.ratePerHour = ratePerHour;
         this.location = location;
         this.description = description;
-        this.contracts = contracts;
-        this.invoices = invoices;
+        this.contracts = new ArrayList<>();
+        this.invoices = new ArrayList<>();
     }
 
     public Long getId() {

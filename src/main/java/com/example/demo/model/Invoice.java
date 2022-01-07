@@ -3,18 +3,22 @@ package com.example.demo.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 @Entity
 @Data
 @Table(name="INVOICE")
-public class Invoice {
+public class Invoice implements Serializable {
 
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
     private Long id;
     @Column
     private double value;
+
+    //Change the way to numbers ddmmyyhms
     @Column
     private Date createdDate;
     @Column
@@ -24,16 +28,18 @@ public class Invoice {
     private Vendor vendor;
     @Column
     private String description;
+    @Column
+    private double truckNumber;
+
     public Invoice(){
 
     }
 
-    public Invoice(Long id, double value, Date createdDate, String status, Vendor vendor, String description) {
+    public Invoice(Long id, double value, Date createdDate, String status, String description) {
         this.id = id;
         this.value = value;
         this.createdDate = createdDate;
         this.status = status;
-        this.vendor = vendor;
         this.description = description;
     }
 
