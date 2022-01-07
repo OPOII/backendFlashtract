@@ -27,7 +27,7 @@ public class ServiceImpl implements IService {
     private IVendorRepository vendorRepository;
 
     @Override
-    public void createContract(Long idClient, Long idVendor, Contract contract) {
+    public Contract createContract(Long idClient, Long idVendor, Contract contract) {
         if(idVendor==null){
             throw new NullPointerException("The id can't be null");
         }
@@ -50,6 +50,7 @@ public class ServiceImpl implements IService {
         client.getContracts().add(contract);
 
         contractRepository.save(contract);
+        return contract;
 
     }
 

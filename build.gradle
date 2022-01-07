@@ -20,6 +20,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.6.2'
+	// https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
+	implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.3'
 
 }
 

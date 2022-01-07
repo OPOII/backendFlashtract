@@ -6,7 +6,7 @@ import com.example.demo.model.Vendor;
 
 public interface IService {
 
-    public void createContract(Long idClient, Long idVendor, Contract contractData);
+    public Contract createContract(Long idClient, Long idVendor, Contract contractData);
 
     public void sendInvoice(Vendor vendor);
 

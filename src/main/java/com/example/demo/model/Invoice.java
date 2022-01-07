@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -25,6 +26,7 @@ public class Invoice implements Serializable {
     private String status;
     @ManyToOne
     @JoinColumn(name ="vendor_id",nullable=false)
+    @JsonIgnore
     private Vendor vendor;
     @Column
     private String description;
@@ -35,13 +37,7 @@ public class Invoice implements Serializable {
 
     }
 
-    public Invoice(Long id, double value, String status, String description) {
-        this.id = id;
-        this.value = value;
-        this.createdDate = new Date();
-        this.status = status;
-        this.description = description;
-    }
+
 
     public Long getId() {
         return id;

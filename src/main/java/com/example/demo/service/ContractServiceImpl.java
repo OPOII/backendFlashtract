@@ -3,6 +3,9 @@ package com.example.demo.service;
 import com.example.demo.model.Contract;
 import com.example.demo.repository.IContractRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,8 +18,8 @@ public class ContractServiceImpl implements ContractService{
     private IContractRepository repository;
 
     @Override
-    public Iterable<Contract> findAll() {
-        return repository.findAll();
+    public Page<Contract> findAll(Integer page, Integer size, Boolean enablePagination) {
+        return repository.findAll(enablePagination? PageRequest.of(page,size): Pageable.unpaged());
     }
 
     @Override
@@ -45,9 +48,9 @@ public class ContractServiceImpl implements ContractService{
     }
 
     @Override
-    public Contract findById(Long id) {
+    public Optional<Contract> findById(Long id) {
         Optional<Contract> contract=repository.findById(id);
-        return contract.get();
+        return contract;
     }
 
     @Override
@@ -55,4 +58,10 @@ public class ContractServiceImpl implements ContractService{
         Optional<Contract> contract=repository.findById(id);
         return contract.get().getReports();
     }
+
+    @Override
+    public boolean existById(Long id) {
+        return repository.existsById(id);
+    }
+
 }

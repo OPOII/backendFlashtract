@@ -1,8 +1,12 @@
 package com.example.demo.service;
 
+import com.example.demo.model.Client;
 import com.example.demo.model.Invoice;
 import com.example.demo.repository.IInvoiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -16,9 +20,8 @@ public class InvoiceServiceImpl implements InvoiceService{
     private IInvoiceRepository repository;
 
     @Override
-    public Iterable<Invoice> findAll() {
-
-        return repository.findAll();
+    public Page<Invoice> findAll(Integer page, Integer size, Boolean enablePagination) {
+        return repository.findAll(enablePagination? PageRequest.of(page,size): Pageable.unpaged());
     }
 
     @Override
@@ -50,10 +53,16 @@ public class InvoiceServiceImpl implements InvoiceService{
     }
 
     @Override
-    public Invoice findById(Long id) {
+    public Optional<Invoice> findById(Long id) {
         Optional<Invoice> invoice=repository.findById(id);
-        return invoice.get();
+        return invoice;
     }
+
+    @Override
+    public boolean existById(Long id) {
+        return repository.existsById(id);
+    }
+
 
 
 }

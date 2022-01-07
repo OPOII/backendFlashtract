@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -39,23 +40,18 @@ public class Contract implements Serializable {
     private Client client;
     @ManyToOne
     @JoinColumn(name ="vendor_id",nullable=false)
+    @JsonIgnore
     private Vendor vendor;
     @Column
-    @ElementCollection(targetClass=String.class)
+    @ElementCollection(targetClass=Integer.class)
+    @JsonIgnore
     private List<String>reports;
 
     public Contract(){
-
+        this.reports=new ArrayList<>();
     }
 
-    public Contract(Long id, String name, double maxValue, Date createdDate, Date finishedDate) {
-        this.id = id;
-        this.name = name;
-        this.maxValue = maxValue;
-        this.createdDate = createdDate;
-        this.finishedDate = finishedDate;
-        this.reports = new ArrayList<>();
-    }
+
 
     public Long getId() {
         return id;
@@ -128,4 +124,6 @@ public class Contract implements Serializable {
     public void setReports(List<String> reports) {
         this.reports = reports;
     }
+
+
 }

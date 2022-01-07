@@ -6,6 +6,9 @@ import com.example.demo.repository.IClientRepository;
 import com.example.demo.repository.IContractRepository;
 import com.example.demo.repository.IVendorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,8 +25,8 @@ public class ClientServiceImpl implements ClientService{
 
 
     @Override
-    public Iterable<Client> findAll() {
-        return repository.findAll();
+    public Page<Client> findAll(Integer page, Integer size,Boolean enablePagination) {
+        return repository.findAll(enablePagination? PageRequest.of(page,size): Pageable.unpaged());
     }
     @Override
     public Client save(@Valid Client client) throws Exception {
@@ -51,8 +54,8 @@ public class ClientServiceImpl implements ClientService{
         }
     }
     @Override
-    public Client findById(Long id) {
-       return repository.findById(id).get();
+    public Optional<Client> findById(Long id) {
+       return repository.findById(id);
 
     }
     @Override
@@ -78,6 +81,10 @@ public class ClientServiceImpl implements ClientService{
         return filter;
     }
 
+    @Override
+    public boolean existById(Long id) {
+        return repository.existsById(id);
+    }
 
 
 }

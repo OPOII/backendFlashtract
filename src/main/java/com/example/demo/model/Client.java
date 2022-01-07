@@ -25,16 +25,13 @@ public class Client implements Serializable {
 
 
     @OneToMany(targetEntity = Contract.class,mappedBy="client")
+    @JsonIgnore
     private List<Contract> contracts;
     public Client(){
-
+        this.contracts = new ArrayList<>();
     }
 
-    public Client(Long id, String name, String description) {
-        this.id = id;
-        this.name = name;
-        this.contracts = new ArrayList<Contract>();
-    }
+
 
     public Long getId() {
         return id;
@@ -59,4 +56,12 @@ public class Client implements Serializable {
     public void setContracts(List<Contract> contracts) {
         this.contracts = contracts;
     }
+
+    public Contract addContract(Contract contract){
+        getContracts().add(contract);
+        contract.setClient(this);
+        return contract;
+    }
+
+
 }
