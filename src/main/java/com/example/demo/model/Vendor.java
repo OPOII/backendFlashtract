@@ -37,12 +37,13 @@ public class Vendor implements Serializable {
 
     }
 
-    public Vendor(Long id, String name, double ratePerHour, String location, String description) {
+    public Vendor(Long id, String name, double ratePerHour, String location, String description,String dni) {
         this.id = id;
         this.name = name;
         this.ratePerHour = ratePerHour;
         this.location = location;
         this.description = description;
+        this.dni=dni;
         this.contracts = new ArrayList<>();
         this.invoices = new ArrayList<>();
     }
@@ -101,6 +102,14 @@ public class Vendor implements Serializable {
 
     public void setInvoices(List<Invoice> invoices) {
         this.invoices = invoices;
+    }
+
+    public String getDni() {
+        return dni;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
     }
 }
 

@@ -90,4 +90,12 @@ public class Invoice implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public String getTrackSerial() {
+        return trackSerial;
+    }
+
+    public void setTrackSerial(String trackSerial) {
+        this.trackSerial = trackSerial;
+    }
 }

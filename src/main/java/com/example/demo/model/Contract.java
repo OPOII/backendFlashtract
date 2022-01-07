@@ -41,6 +41,7 @@ public class Contract implements Serializable {
     @JoinColumn(name ="vendor_id",nullable=false)
     private Vendor vendor;
     @Column
+    @ElementCollection(targetClass=String.class)
     private List<String>reports;
 
     public Contract(){
@@ -110,5 +111,21 @@ public class Contract implements Serializable {
 
     public void setVendor(Vendor vendor) {
         this.vendor = vendor;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public List<String> getReports() {
+        return reports;
+    }
+
+    public void setReports(List<String> reports) {
+        this.reports = reports;
     }
 }
