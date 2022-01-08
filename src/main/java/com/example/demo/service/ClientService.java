@@ -14,13 +14,13 @@ public interface ClientService {
 
     public Page<Client> findAll(Integer page, Integer size,Boolean enablePagination);
     public Client save(Client client) ;
-    public Client update(Client client)throws Exception;
+    public Client update(Client client);
     public void delete(Long id);
     public Optional<Client> findById(Long id);
     public List<Contract> getContracts(Long id);
     public Contract searchContractById(Long id);
     public Contract searchContractByDate(Long idClient,Date date);
     public boolean existById(Long id);
-    public Contract createContract(Contract contract, Long vendorID, Long clientID)throws Exception;
+    public Contract createContract(Contract contract, Long vendorID, Long clientID);
     public List<String> getHistoryBills(Long idClient, Long idContract);
 }

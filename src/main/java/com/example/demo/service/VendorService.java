@@ -9,11 +9,11 @@ import java.util.Optional;
 public interface VendorService {
 
     public Page<Vendor> findAll(Integer page, Integer size, Boolean enablePagination);
-    public Vendor save(Vendor vendor) throws Exception;
-    public Vendor update(Vendor vendor)throws Exception;
+    public Vendor save(Vendor vendor);
+    public Vendor update(Vendor vendor);
     public void delete(Long id);
     public Optional<Vendor> findById(Long id);
     public boolean existById(Long id);
-    public Invoice createInvoice(Invoice invoice, Long idVendor)throws Exception;
-    public String sendInvoice(Long idInvoice, Long idVendor) throws Exception;
+    public Invoice createInvoice(Invoice invoice, Long idVendor);
+    public String sendInvoice(Long idInvoice, Long idVendor);
 }

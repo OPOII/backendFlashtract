@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.exception.ApiRequestException;
 import com.example.demo.model.Contract;
 import com.example.demo.model.Invoice;
 import com.example.demo.model.Vendor;
@@ -11,16 +12,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Date;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -43,21 +40,34 @@ public class VendorServiceImpl implements VendorService {
 
     @Override
     @Transactional
-    public Vendor save(Vendor vendor) throws Exception {
+    public Vendor save(Vendor vendor){
+        if(vendor==null){
+            throw  new ApiRequestException("The vendor can't be null");
+        }if(vendor.getName().isBlank() || vendor.getName().isEmpty()){
+            throw  new ApiRequestException("Check the vendor name field, error caused by vendorName "+vendor.getName());
+        }if(vendor.getDni().length()<10){
+            throw  new ApiRequestException("Check the vendor dni field, error caused by vendorDNI "+vendor.getDni());
+        }if(vendor.getRatePerHour()<=0){
+            throw  new ApiRequestException("Check the vendor ratePerHour field, error caused by vendorRatePerHour "+vendor.getRatePerHour());
+        }if(vendor.getLocation().isBlank() || vendor.getLocation().isEmpty()){
+            throw  new ApiRequestException("Check the vendor location field, error caused by vendorLocation "+vendor.getLocation());
+        }if(vendor.getDescription().isBlank() || vendor.getDescription().isEmpty()){
+            throw  new ApiRequestException("Check the vendor description field, error caused by vendorDescription "+vendor.getDescription());
+        }
        try {
         return repository.save(vendor);
        }catch (Exception e){
-           throw  new Exception(e.getLocalizedMessage());
+           throw  new ApiRequestException("Something went wrong and can't save the vendor");
        }
     }
 
     @Override
     @Transactional
-    public Vendor update(Vendor vendor) throws Exception {
+    public Vendor update(Vendor vendor){
         try {
             return repository.save(vendor);
         }catch (Error e){
-            throw  new Exception("Something get wrong");
+            throw  new ApiRequestException("Something get wrong");
         }
     }
 
@@ -66,6 +76,8 @@ public class VendorServiceImpl implements VendorService {
     public void delete(Long id) {
         if(id!=null && id>0){
             repository.deleteById(id);
+        }else{
+            throw  new ApiRequestException("Something get wrong");
         }
     }
 
@@ -83,33 +95,31 @@ public class VendorServiceImpl implements VendorService {
 
     @Override
     @Transactional
-    public Invoice createInvoice(Invoice invoice, Long idVendor)throws Exception {
+    public Invoice createInvoice(Invoice invoice, Long idVendor){
         try {
            create(invoice,idVendor);
            return invoiceRepository.save(invoice);
         }catch(Exception e){
-            throw new Exception("Something went wrong");
+            throw new ApiRequestException(e.getLocalizedMessage());
         }
     }
 
     @Override
-    public String sendInvoice(Long idInvoice, Long idVendor) throws Exception {
+    public String sendInvoice(Long idInvoice, Long idVendor){
         Invoice actualInvoice=null;
         Contract pointerContract=null;
         try {
             Vendor vendor=repository.getById(idVendor);
             int posActualInvoice=Math.toIntExact(idInvoice);
-            System.out.println(posActualInvoice);
             posActualInvoice=posActualInvoice-1;
-            System.out.println(posActualInvoice);
             actualInvoice=vendor.getInvoices().get(posActualInvoice);
         }catch (Exception e){
-            throw new Exception(e.getMessage());
+            throw new ApiRequestException("The vendor with that id doesn't exist");
         }
         try {
             pointerContract=contractRepository.getById(actualInvoice.getContractID());
         }catch (Exception e){
-            throw new Exception(e.getMessage());
+            throw new ApiRequestException("The contract with that id doesn't exist");
         }
             actualInvoice.setStatus("Sumbmitted");
             String reporte="";
@@ -126,7 +136,7 @@ public class VendorServiceImpl implements VendorService {
                 try{
                    afterInvoice=new DecimalFormat("#").format(pointerContract.discountInvoidBill(actualInvoice.getTotalValue()));
                 }catch(Exception e){
-                    throw new Exception("Something get wrong");
+                    throw new ApiRequestException("Something get wrong");
                 }
                 reporte+="Value of the contract after apply the invoice: "+afterInvoice+"\n"
                         +"Client responsible: "+pointerContract.getClient().getName()+"\n"
@@ -135,7 +145,7 @@ public class VendorServiceImpl implements VendorService {
                 try{
                     pointerContract.getReports().add(reporte);
                 }catch (Exception e){
-                    throw new Exception("Something get wrong");
+                    throw new ApiRequestException("Something get wrong");
                 }
                 actualInvoice.setStatus("Approved");
             }else{
@@ -149,7 +159,32 @@ public class VendorServiceImpl implements VendorService {
 
     public void create(Invoice invoice, Long idVendor){
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-        Vendor vendor=repository.findById(idVendor).get();
+        Vendor vendor=null;
+        try{
+            vendor=repository.findById(idVendor).get();
+            if(vendor==null){
+                throw new ApiRequestException("The vendor you are trying to associate the invoice doesn't exist, vendorID: "+Math.toIntExact(idVendor));
+            }
+        }catch (Exception e){
+            throw new ApiRequestException("The vendor you are trying to associate the invoice doesn't exist, vendorID: "+Math.toIntExact(idVendor));
+        }
+        if(invoice.getHoursWorked() <= 0){
+            throw  new ApiRequestException("Check the invoice hours worked field, error caused by invoiceWorkedHours "+invoice.getHoursWorked());
+        }if(invoice.getDescription().isBlank() || invoice.getDescription().isEmpty()){
+            throw  new ApiRequestException("Check the invoice description field, error caused by invoiceDescription "+invoice.getDescription());
+        }if(invoice.getMaterials() <= 0){
+            throw  new ApiRequestException("Check the invoice materials field, error caused by invoiceGetMaterials "+invoice.getMaterials());
+        }if(invoice.getContractID() <= 0){
+            throw  new ApiRequestException("Check the invoice contract ID field, error caused by invoiceContractID "+invoice.getContractID());
+        }
+        try{
+            Contract contract=contractRepository.findById(invoice.getContractID()).get();
+            if(contract==null){
+                throw  new ApiRequestException("The contract that you are creating the bill doesn't exist, please verify an existing contract");
+            }
+        }catch (Exception e){
+            throw  new ApiRequestException("Something went wrong");
+        }
         String tracker=formatter.format(invoice.getCreatedDate());
         tracker=tracker+"/"+vendor.getName()+"/"+vendor.getDni();
         invoice.setTrackSerial(tracker);
@@ -159,21 +194,7 @@ public class VendorServiceImpl implements VendorService {
         invoice.setStatus("In Progress");
         vendor.addInvoice(invoice);
     }
-    @Transactional
-    public Invoice sendInvoicePart1(Long idInvoice,Long idVendor){
-        Vendor vendor=repository.getById(idVendor);
-        int posActualInvoice=Math.toIntExact(idInvoice);
-        System.out.println(posActualInvoice);
-        posActualInvoice=posActualInvoice-1;
-        System.out.println(posActualInvoice);
-        Invoice actualInvoice=vendor.getInvoices().get(posActualInvoice);
-        return actualInvoice;
-    }
-    @Transactional
-    public Contract getContractTransactional(Invoice actualInvoice){
-        Contract pointerContract=contractRepository.getById(actualInvoice.getContractID());
-        return pointerContract;
-    }
+
 
 
 }

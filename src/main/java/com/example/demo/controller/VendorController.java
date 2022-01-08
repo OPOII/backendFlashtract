@@ -20,12 +20,8 @@ public class VendorController {
     private VendorService service;
 
     @PostMapping
-    public ResponseEntity<Vendor>saveVendor(@RequestBody Vendor vendor)throws Exception{
-        try {
+    public ResponseEntity<Vendor>saveVendor(@RequestBody Vendor vendor){
             return ResponseEntity.status(HttpStatus.CREATED).body(service.save(vendor));
-        }catch (Exception e){
-            throw new Exception("Something went wrong");
-        }
     }
     @GetMapping
     public ResponseEntity<Page<Vendor>> getAllClients(
@@ -55,21 +51,13 @@ public class VendorController {
     }
 
     @PostMapping(value="/{id}/createInvoice")
-    public ResponseEntity<Invoice>createInvoice(@RequestBody Invoice invoice, @RequestParam Long idVendor)throws Exception{
-        try {
+    public ResponseEntity<Invoice>createInvoice(@RequestBody Invoice invoice, @RequestParam Long idVendor){
             return ResponseEntity.status(HttpStatus.CREATED).body(service.createInvoice(invoice,idVendor));
-        }catch (Exception e){
-            throw new Exception(e.getLocalizedMessage());
-        }
     }
 
     @PatchMapping(value="/{id}/sendInvoice")
-    public ResponseEntity sendInvoice(@RequestParam Long idInvoice, @RequestParam Long idVendor) throws Exception {
-        try {
+    public ResponseEntity sendInvoice(@RequestParam Long idInvoice, @RequestParam Long idVendor){
             return ResponseEntity.status(HttpStatus.OK).body(service.sendInvoice(idInvoice,idVendor));
-        }catch(Exception e){
-            throw new Exception(e.getLocalizedMessage());
-        }
     }
 
 

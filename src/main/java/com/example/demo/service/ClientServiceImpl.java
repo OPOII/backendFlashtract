@@ -41,13 +41,13 @@ public class ClientServiceImpl implements ClientService{
     public Client save(Client client)  {
         String message="";
         if(client.getName().isBlank() || client.getName().isEmpty()){
-            message="Check the client name field,"+"caused by: "+"cliengName"+client.getName();
+            message="Check the client name field,"+"error caused by: "+"cliengName "+client.getName();
             throw new ApiRequestException(message);
         }else if(client.getCompany().isBlank() || client.getCompany().isEmpty()){
-            message="Check the company name field,"+"caused by: "+" clientCompany " +client.getCompany();
+            message="Check the company name field,"+"error caused by: "+" clientCompany " +client.getCompany();
             throw new ApiRequestException(message);
         }else if(client.getProfessionalCard()<=0 ){
-            message="Check the professional card field,"+"caused by: "+"client professionalCard "+client.getProfessionalCard();
+            message="Check the professional card field,"+"error caused by: "+"client professionalCard "+client.getProfessionalCard();
             throw new ApiRequestException(message);
         }else{
             return repository.save(client);
@@ -55,11 +55,11 @@ public class ClientServiceImpl implements ClientService{
     }
     @Override
     @Transactional
-    public Client update(Client client) throws Exception {
+    public Client update(Client client)  {
         if(client.getId() !=null &&  repository.existsById(client.getId())){
           return  repository.save(client);
         }else{
-            throw new Exception("Something got wrong while updating client");
+            throw new ApiRequestException("Something got wrong while updating client");
         }
     }
     @Override
@@ -108,7 +108,21 @@ public class ClientServiceImpl implements ClientService{
 
     @Override
     @Transactional
-    public Contract createContract(Contract contract, Long vendorID, Long clientID)throws Exception {
+    public Contract createContract(Contract contract, Long vendorID, Long clientID) {
+        try{
+            if(vendorRepository.existsById(vendorID)==false) {
+                throw new ApiRequestException("The vendor you are trying to get doesn't exist, check that is created");
+            }
+        }catch(Exception e){
+            throw new ApiRequestException("Something went wrong creating the contract");
+        }
+        try{
+            if(repository.existsById(clientID)==false) {
+                throw new ApiRequestException("The client you are trying to get doesn't exist, check that is created");
+            }
+        }catch(Exception e){
+            throw new ApiRequestException("Something went wrong creating the contract");
+        }
         try{
             Vendor vendor=vendorRepository.findById(vendorID).get();
             Client client=repository.findById(clientID).get();
@@ -124,7 +138,7 @@ public class ClientServiceImpl implements ClientService{
              */
             return contractRepository.save(contract);
         }catch (Exception e){
-            throw new Exception(e.getLocalizedMessage());
+            throw new ApiRequestException("Something went wrong creating the contract");
         }
     }
 
@@ -135,10 +149,10 @@ public class ClientServiceImpl implements ClientService{
         posContract-=1;
         try{
             client=repository.findById(idClient).get();
+            return client.getContracts().get(posContract).getReports();
         }catch (Exception e){
-
+            throw new ApiRequestException("Something went wrong when getting the bills");
         }
-        return client.getContracts().get(posContract).getReports();
 
     }
 

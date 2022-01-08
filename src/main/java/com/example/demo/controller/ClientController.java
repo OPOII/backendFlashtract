@@ -47,14 +47,12 @@ public class ClientController {
     }
 
     @PutMapping
-    public ResponseEntity<Client> editClient(@RequestBody Client client) throws Exception {
-
+    public ResponseEntity<Client> editClient(@RequestBody Client client)  {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.update(client));
     }
 
     @PostMapping(value="/createContract")
-    public ResponseEntity<Contract> createContract(@RequestBody Contract contract, @RequestParam Long vendorID, @RequestParam Long clientID)throws Exception{
-
+    public ResponseEntity<Contract> createContract(@RequestBody Contract contract, @RequestParam Long vendorID, @RequestParam Long clientID){
         return ResponseEntity.status(HttpStatus.CREATED).body( service.createContract(contract,vendorID,clientID));
     }
 
