@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface ClientService {
 
     public Page<Client> findAll(Integer page, Integer size,Boolean enablePagination);
-    public Client save(Client client) throws Exception;
+    public Client save(Client client) ;
     public Client update(Client client)throws Exception;
     public void delete(Long id);
     public Optional<Client> findById(Long id);

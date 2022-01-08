@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.exception.ApiRequestException;
 import com.example.demo.model.Client;
 import com.example.demo.model.Contract;
 import com.example.demo.model.Vendor;
@@ -37,13 +38,20 @@ public class ClientServiceImpl implements ClientService{
     }
     @Override
     @Transactional
-    public Client save(Client client) throws Exception {
-        if(client!=null){
-           return repository.save(client);
+    public Client save(Client client)  {
+        String message="";
+        if(client.getName().isBlank() || client.getName().isEmpty()){
+            message="Check the client name field,"+"caused by: "+"cliengName"+client.getName();
+            throw new ApiRequestException(message);
+        }else if(client.getCompany().isBlank() || client.getCompany().isEmpty()){
+            message="Check the company name field,"+"caused by: "+" clientCompany " +client.getCompany();
+            throw new ApiRequestException(message);
+        }else if(client.getProfessionalCard()<=0 ){
+            message="Check the professional card field,"+"caused by: "+"client professionalCard "+client.getProfessionalCard();
+            throw new ApiRequestException(message);
         }else{
-            throw new Exception("Client can't be null");
+            return repository.save(client);
         }
-
     }
     @Override
     @Transactional

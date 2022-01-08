@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.exception.ApiRequestException;
 import com.example.demo.model.Client;
 import com.example.demo.model.Contract;
 import com.example.demo.service.ClientService;
@@ -21,9 +22,8 @@ public class ClientController {
     private ClientService service;
 
     @PostMapping
-    public ResponseEntity<Client> saveClient(@RequestBody Client client) throws Exception {
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(client));
+    public ResponseEntity<Client> saveClient(@RequestBody Client client)  {
+            return ResponseEntity.status(HttpStatus.CREATED).body(service.save(client));
     }
     @GetMapping
     public ResponseEntity<Page<Client>> getAllClients(
@@ -36,7 +36,7 @@ public class ClientController {
     public ResponseEntity deleteClient(@PathVariable ("id") Long id){
         service.delete(id);
         ResponseEntity.ok(service.existById(id));
-        return ResponseEntity.ok(service.existById(id));
+        return ResponseEntity.ok("The client with the id: "+id +" was successfully deleted");
     }
 
     @GetMapping(value="/{id}")
@@ -54,7 +54,8 @@ public class ClientController {
 
     @PostMapping(value="/createContract")
     public ResponseEntity<Contract> createContract(@RequestBody Contract contract, @RequestParam Long vendorID, @RequestParam Long clientID)throws Exception{
-       return ResponseEntity.status(HttpStatus.CREATED).body( service.createContract(contract,vendorID,clientID));
+
+        return ResponseEntity.status(HttpStatus.CREATED).body( service.createContract(contract,vendorID,clientID));
     }
 
     @GetMapping(value="/{id}/contracts")
