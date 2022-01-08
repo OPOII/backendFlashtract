@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Contract;
+import com.example.demo.model.Invoice;
 import com.example.demo.service.IService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,4 +23,6 @@ public class ServiceController {
     public ResponseEntity saveService(@PathVariable("id")Long idClient, @PathVariable("id")Long idVendor, @RequestBody Contract contract){
        return ResponseEntity.status(HttpStatus.CREATED).body(service.createContract(idClient,idVendor, contract));
    }
+
+
 }

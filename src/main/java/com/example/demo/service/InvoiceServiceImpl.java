@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.text.SimpleDateFormat;
 import java.util.Optional;
 import java.util.logging.SimpleFormatter;
@@ -25,11 +26,13 @@ public class InvoiceServiceImpl implements InvoiceService{
     private IVendorRepository vendorRepo;
 
     @Override
+    @Transactional
     public Iterable<Invoice> findAll() {
         return repository.findAll();
     }
 
     @Override
+    @Transactional
     public Invoice save(Invoice invoice)throws Exception {
 
         try {
@@ -41,6 +44,7 @@ public class InvoiceServiceImpl implements InvoiceService{
     }
 
     @Override
+    @Transactional
     public Invoice update(Invoice invoice) throws Exception{
         if(invoice!=null && invoice.getId()!=null){
             return repository.save(invoice);
@@ -50,6 +54,7 @@ public class InvoiceServiceImpl implements InvoiceService{
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         if(id!=null && id>0){
             repository.deleteById(id);
@@ -57,17 +62,20 @@ public class InvoiceServiceImpl implements InvoiceService{
     }
 
     @Override
+    @Transactional
     public Invoice findById(Long id) {
         Invoice invoice=repository.findById(id).get();
         return invoice;
     }
 
     @Override
+    @Transactional
     public boolean existById(Long id) {
         return repository.existsById(id);
     }
 
     @Override
+    @Transactional
     public Vendor getVendorByID(Long id) throws Exception{
         try {
             Invoice actual=repository.findById(id).get();

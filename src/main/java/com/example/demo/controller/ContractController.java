@@ -20,7 +20,6 @@ public class ContractController {
 
     @PostMapping
     public ResponseEntity<Contract> save(@RequestBody Contract contract) throws Exception {
-        System.out.println(contract.getClient());
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(contract));
     }
 

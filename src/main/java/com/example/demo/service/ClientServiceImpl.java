@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -30,10 +31,12 @@ public class ClientServiceImpl implements ClientService{
 
 
     @Override
+    @Transactional
     public Page<Client> findAll(Integer page, Integer size,Boolean enablePagination) {
         return repository.findAll(enablePagination? PageRequest.of(page,size): Pageable.unpaged());
     }
     @Override
+    @Transactional
     public Client save(Client client) throws Exception {
         if(client!=null){
            return repository.save(client);
@@ -43,6 +46,7 @@ public class ClientServiceImpl implements ClientService{
 
     }
     @Override
+    @Transactional
     public Client update(Client client) throws Exception {
         if(client.getId() !=null &&  repository.existsById(client.getId())){
           return  repository.save(client);
@@ -51,6 +55,7 @@ public class ClientServiceImpl implements ClientService{
         }
     }
     @Override
+    @Transactional
     public void delete(Long id) {
         if(id!=null && id>0){
             repository.deleteById(id);
@@ -62,6 +67,7 @@ public class ClientServiceImpl implements ClientService{
 
     }
     @Override
+    @Transactional
     public List<Contract> getContracts(Long id) {
 
         Client actual=repository.findById(id).get();
@@ -69,6 +75,7 @@ public class ClientServiceImpl implements ClientService{
 
     }
     @Override
+    @Transactional
     public Contract searchContractById(Long id) {
         Client actual=repository.findById(id).get();
         List<Contract> list=actual.getContracts();
@@ -77,6 +84,7 @@ public class ClientServiceImpl implements ClientService{
 
     }
     @Override
+    @Transactional
     public Contract searchContractByDate(Long idClient,Date date) {
         Optional<Client>actual=repository.findById(idClient);
         List<Contract> list=actual.get().getContracts();
@@ -85,11 +93,13 @@ public class ClientServiceImpl implements ClientService{
     }
 
     @Override
+    @Transactional
     public boolean existById(Long id) {
         return repository.existsById(id);
     }
 
     @Override
+    @Transactional
     public Contract createContract(Contract contract, Long vendorID, Long clientID)throws Exception {
         try{
             Vendor vendor=vendorRepository.findById(vendorID).get();
@@ -98,13 +108,30 @@ public class ClientServiceImpl implements ClientService{
             contract.setClient(client);
 
             vendor.addContract(contract);
-
+            System.out.println("Contratos vendedor: "+vendor.getContracts().size());
             client.addContract(contract);
-
-           return contractRepository.save(contract);
+            System.out.println("Contratos cliente: "+client.getContracts().size());
+            /**
+             * Some problem here
+             */
+            return contractRepository.save(contract);
         }catch (Exception e){
-            throw new Exception("Something went wrong");
+            throw new Exception(e.getLocalizedMessage());
         }
+    }
+
+    @Override
+    public List<String> getHistoryBills(Long idClient, Long idContract) {
+        Client client=null;
+        int posContract=Math.toIntExact(idContract);
+        posContract-=1;
+        try{
+            client=repository.findById(idClient).get();
+        }catch (Exception e){
+
+        }
+        return client.getContracts().get(posContract).getReports();
+
     }
 
 

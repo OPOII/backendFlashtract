@@ -61,4 +61,8 @@ public class ClientController {
     public ResponseEntity<List<Contract>>getContracts(@RequestParam Long clientID){
         return ResponseEntity.status(HttpStatus.OK).body(service.getContracts(clientID));
     }
+    @GetMapping(value="/{id}/reports")
+    public ResponseEntity<List<String>>getReports(@RequestParam Long idClient, @RequestParam Long idContract){
+        return ResponseEntity.status(HttpStatus.OK).body(service.getHistoryBills(idClient, idContract));
+    }
 }

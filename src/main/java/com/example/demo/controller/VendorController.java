@@ -38,7 +38,7 @@ public class VendorController {
     @DeleteMapping(value="/delete/{id}")
     public ResponseEntity deleteContract(@PathVariable ("id") Long id){
         service.delete(id);
-        ResponseEntity.ok(service.existById(id));
+        ResponseEntity.ok(!service.existById(id));
         return ResponseEntity.ok(service.existById(id));
     }
 
@@ -50,7 +50,7 @@ public class VendorController {
     }
 
     @PutMapping
-    public ResponseEntity<Vendor> editContract(@RequestBody Vendor vendor) throws Exception {
+    public ResponseEntity<Vendor> update(@RequestBody Vendor vendor) throws Exception {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(service.update(vendor));
     }
 
@@ -62,5 +62,17 @@ public class VendorController {
             throw new Exception(e.getLocalizedMessage());
         }
     }
+
+    @PatchMapping(value="/{id}/sendInvoice")
+    public ResponseEntity sendInvoice(@RequestParam Long idInvoice, @RequestParam Long idVendor) throws Exception {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(service.sendInvoice(idInvoice,idVendor));
+        }catch(Exception e){
+            throw new Exception(e.getLocalizedMessage());
+        }
+    }
+
+
+
 
 }

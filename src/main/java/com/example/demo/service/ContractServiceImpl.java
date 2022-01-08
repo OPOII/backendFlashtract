@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,20 +19,17 @@ public class ContractServiceImpl implements ContractService{
     private IContractRepository repository;
 
     @Override
+    @Transactional
     public Page<Contract> findAll(Integer page, Integer size, Boolean enablePagination) {
         return repository.findAll(enablePagination? PageRequest.of(page,size): Pageable.unpaged());
     }
 
     @Override
+    @Transactional
     public Contract save(Contract contract) throws Exception{
 
         try {
-            boolean validate=validateContractData(contract);
-            if(validate){
-                return repository.save(contract);
-            }else{
-                throw new Exception("There is missing data or you input wrong data");
-            }
+           return repository.save(contract);
 
         }catch (Exception e) {
             throw new Exception(e.getLocalizedMessage());
@@ -40,6 +38,7 @@ public class ContractServiceImpl implements ContractService{
     }
 
     @Override
+    @Transactional
     public Contract update(Contract contract) throws Exception{
         if(contract!=null && contract.getId()!=null){
             return repository.save(contract);
@@ -49,6 +48,7 @@ public class ContractServiceImpl implements ContractService{
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         if(id!=null && id>0){
             repository.deleteById(id);
@@ -56,18 +56,21 @@ public class ContractServiceImpl implements ContractService{
     }
 
     @Override
+    @Transactional
     public Optional<Contract> findById(Long id) {
         Optional<Contract> contract=repository.findById(id);
         return contract;
     }
 
     @Override
+    @Transactional
     public List<String> getReports(Long id) {
         Optional<Contract> contract=repository.findById(id);
         return contract.get().getReports();
     }
 
     @Override
+    @Transactional
     public boolean existById(Long id) {
         return repository.existsById(id);
     }

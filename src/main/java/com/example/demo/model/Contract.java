@@ -31,13 +31,10 @@ public class Contract implements Serializable {
     @NotNull
     private String description;
     @Column
-    @NotNull
     private String terms;
     @Column
-    @NotNull
     private Date createdDate;
     @Column
-    @NotNull
     private Date finishedDate;
 
     @ManyToOne
@@ -48,6 +45,7 @@ public class Contract implements Serializable {
     @JoinColumn(name ="vendor_id")
     @JsonIgnore
     private Vendor vendor;
+
     @Column
     @ElementCollection(targetClass=Integer.class)
     @JsonIgnore
@@ -132,5 +130,9 @@ public class Contract implements Serializable {
         this.reports = reports;
     }
 
+    public double discountInvoidBill(double mount){
+        this.maxValue=this.maxValue-mount;
+        return maxValue;
+    }
 
 }

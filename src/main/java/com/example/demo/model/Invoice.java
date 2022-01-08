@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
@@ -38,8 +39,13 @@ public class Invoice implements Serializable {
     @NotBlank
     private String description;
     @Column
+    private double materials;
+    @Column
     @NotNull
     private String trackSerial;
+    @Column
+    @NotNull
+    private Long contractID;
 
     public Invoice(){
 
@@ -111,4 +117,19 @@ public class Invoice implements Serializable {
         this.trackSerial = trackSerial;
     }
 
+    public double getMaterials() {
+        return materials;
+    }
+
+    public void setMaterials(double materials) {
+        this.materials = materials;
+    }
+
+    public Long getContractID() {
+        return contractID;
+    }
+
+    public void setContractID(Long contractID) {
+        this.contractID = contractID;
+    }
 }

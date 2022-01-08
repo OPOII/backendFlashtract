@@ -15,4 +15,5 @@ public interface VendorService {
     public Optional<Vendor> findById(Long id);
     public boolean existById(Long id);
     public Invoice createInvoice(Invoice invoice, Long idVendor)throws Exception;
+    public String sendInvoice(Long idInvoice, Long idVendor) throws Exception;
 }

@@ -10,6 +10,7 @@ import com.example.demo.repository.IVendorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
@@ -27,6 +28,7 @@ public class ServiceImpl implements IService {
     private IVendorRepository vendorRepository;
 
     @Override
+    @Transactional
     public Contract createContract(Long idClient, Long idVendor, Contract contract) {
         if(idVendor==null){
             throw new NullPointerException("The id can't be null");
