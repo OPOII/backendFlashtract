@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -46,14 +47,12 @@ public class Contract implements Serializable {
     @JsonIgnore
     private Vendor vendor;
 
-    @Column
-    @ElementCollection(targetClass=Integer.class)
+    @ElementCollection
+    @Column(columnDefinition="text")
     @JsonIgnore
-    private List<String>reports;
+    private List<String>reports=new ArrayList<String>();
 
     public Contract(){
-
-        this.reports=new ArrayList<>();
     }
 
 

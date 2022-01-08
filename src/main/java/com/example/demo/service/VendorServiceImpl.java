@@ -23,6 +23,8 @@ import java.util.Optional;
 @Service
 public class VendorServiceImpl implements VendorService {
 
+
+
     @Autowired
     private IVendorRepository repository;
 
@@ -108,6 +110,7 @@ public class VendorServiceImpl implements VendorService {
     public String sendInvoice(Long idInvoice, Long idVendor){
         Invoice actualInvoice=null;
         Contract pointerContract=null;
+        String message="";
         try {
             Vendor vendor=repository.getById(idVendor);
             int posActualInvoice=Math.toIntExact(idInvoice);
@@ -118,45 +121,57 @@ public class VendorServiceImpl implements VendorService {
         }
         try {
             pointerContract=contractRepository.getById(actualInvoice.getContractID());
+
         }catch (Exception e){
             throw new ApiRequestException("The contract with that id doesn't exist");
         }
-            actualInvoice.setStatus("Sumbmitted");
-            String reporte="";
-            LocalDateTime myDateObj = LocalDateTime.now();
-            System.out.println("Before formatting: " + myDateObj);
-            DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            String invoiceValue=new DecimalFormat("#").format(actualInvoice.getTotalValue());
-            String beforeInvoice=new DecimalFormat("#").format(pointerContract.getMaxValue());
-            String afterInvoice="";
-            if(pointerContract.getMaxValue()-actualInvoice.getTotalValue()>0){
-                reporte="Transaction state: Approved"+"\n"+
-                        "Value of the invoice: "+invoiceValue+"\n"+
-                        "Value of the contract before apply the invoice: "+beforeInvoice+"\n";
-                try{
-                   afterInvoice=new DecimalFormat("#").format(pointerContract.discountInvoidBill(actualInvoice.getTotalValue()));
-                }catch(Exception e){
-                    throw new ApiRequestException("Something get wrong");
-                }
-                reporte+="Value of the contract after apply the invoice: "+afterInvoice+"\n"
-                        +"Client responsible: "+pointerContract.getClient().getName()+"\n"
-                        +"Vendor who send the invoice: "+pointerContract.getVendor().getName()+"\n"
-                        +"Approbation Date: "+myDateObj.format(myFormatObj);
-                try{
-                    pointerContract.getReports().add(reporte);
-                }catch (Exception e){
-                    throw new ApiRequestException("Something get wrong");
-                }
-                actualInvoice.setStatus("Approved");
-            }else{
-                actualInvoice.setStatus("Rejected");
-            }
-            System.out.println(pointerContract.getReports().get(0));
-            return actualInvoice.getStatus();
-
-
+        try {
+            sending(actualInvoice, pointerContract);
+        }catch (Exception e){
+            throw new ApiRequestException("Can't do the tings");
+        }
+        return actualInvoice.getStatus();
     }
 
+    private String sending(Invoice actualInvoice, Contract pointerContract) {
+        actualInvoice.setStatus("Sumbmitted");
+        String reporte="";
+        LocalDateTime myDateObj = LocalDateTime.now();
+        System.out.println("Before formatting: " + myDateObj);
+        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String invoiceValue=new DecimalFormat("#").format(actualInvoice.getTotalValue());
+        String beforeInvoice=new DecimalFormat("#").format(pointerContract.getMaxValue());
+        String afterInvoice="";
+        if(pointerContract.getMaxValue()- actualInvoice.getTotalValue()>0){
+            reporte="Transaction state: Approved"+"\n"+
+                    "Value of the invoice: "+invoiceValue+"\n"+
+                    "Value of the contract before apply the invoice: "+beforeInvoice+"\n";
+            try{
+               afterInvoice=new DecimalFormat("#").format(pointerContract.discountInvoidBill(actualInvoice.getTotalValue()));
+            }catch(Exception e){
+                throw new ApiRequestException("Something get wrong");
+            }
+            reporte+="Value of the contract after apply the invoice: "+afterInvoice+"\n"
+                    +"Client responsible: "+ pointerContract.getClient().getName()+"\n"
+                    +"Vendor who send the invoice: "+ pointerContract.getVendor().getName()+"\n"
+                    +"Approbation Date: "+myDateObj.format(myFormatObj);
+            pointerContract.getReports().add(reporte);
+            actualInvoice.setStatus("Approved");
+        }else{
+            actualInvoice.setStatus("Rejected");
+        }
+        try {
+            contractRepository.saveAndFlush(pointerContract);
+        }catch(Exception e){
+            throw new ApiRequestException("Some problem merging the data");
+        }
+        return reporte;
+    }
+
+    @Transactional
+    public void addReports(Contract contract, String reportes){
+        contractRepository.getById(contract.getId()).getReports().add(reportes);
+    }
     public void create(Invoice invoice, Long idVendor){
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         Vendor vendor=null;
