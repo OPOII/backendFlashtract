@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.exception.ApiRequestException;
 import com.example.demo.model.Client;
 import com.example.demo.model.Invoice;
 import com.example.demo.model.Vendor;
@@ -33,23 +34,23 @@ public class InvoiceServiceImpl implements InvoiceService{
 
     @Override
     @Transactional
-    public Invoice save(Invoice invoice)throws Exception {
+    public Invoice save(Invoice invoice){
 
         try {
             return repository.save(invoice);
         }catch (Exception e) {
-            throw new Exception("Something get wrong");
+            throw new ApiRequestException("Something get wrong");
         }
 
     }
 
     @Override
     @Transactional
-    public Invoice update(Invoice invoice) throws Exception{
+    public Invoice update(Invoice invoice){
         if(invoice!=null && invoice.getId()!=null){
             return repository.save(invoice);
         }else{
-            throw new NullPointerException("The invoice can't be null");
+            throw new ApiRequestException("The invoice can't be null");
         }
     }
 
@@ -76,12 +77,12 @@ public class InvoiceServiceImpl implements InvoiceService{
 
     @Override
     @Transactional
-    public Vendor getVendorByID(Long id) throws Exception{
+    public Vendor getVendorByID(Long id){
         try {
             Invoice actual=repository.findById(id).get();
             return actual.getVendor();
         }catch (Exception e) {
-            throw new Exception("Something went wrong");
+            throw new ApiRequestException("Something went wrong");
         }
     }
 

@@ -9,8 +9,8 @@ import java.util.Optional;
 public interface ContractService {
 
     public Page<Contract> findAll(Integer page, Integer size, Boolean enablePagination);
-    public Contract save(Contract contract)throws Exception;
-    public Contract update(Contract contract)throws Exception;
+    public Contract save(Contract contract);
+    public Contract update(Contract contract);
     public void delete(Long id);
     public Optional<Contract> findById(Long id);
     public List<String> getReports(Long id);

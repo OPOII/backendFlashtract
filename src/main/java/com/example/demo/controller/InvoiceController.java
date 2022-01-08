@@ -20,8 +20,7 @@ public class InvoiceController {
     private InvoiceService service;
 
     @PostMapping
-    public ResponseEntity<Invoice> saveInvoice(@RequestBody Invoice invoice) throws Exception {
-
+    public ResponseEntity<Invoice> saveInvoice(@RequestBody Invoice invoice) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(invoice));
     }
     @GetMapping
@@ -43,13 +42,12 @@ public class InvoiceController {
     }
 
     @PutMapping
-    public ResponseEntity<Invoice> editInvoice(@RequestBody Invoice invoice) throws Exception {
-
+    public ResponseEntity<Invoice> editInvoice(@RequestBody Invoice invoice)  {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.update(invoice));
     }
 
     @GetMapping(value = "/{id}/vendor")
-    public ResponseEntity<Vendor> findContractVendor(@RequestParam Long id)throws Exception{
+    public ResponseEntity<Vendor> findContractVendor(@RequestParam Long id){
        return ResponseEntity.status(HttpStatus.OK).body(service.getVendorByID(id));
     }
 }

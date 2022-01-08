@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.exception.ApiRequestException;
 import com.example.demo.model.Contract;
 import com.example.demo.repository.IContractRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,24 +27,24 @@ public class ContractServiceImpl implements ContractService{
 
     @Override
     @Transactional
-    public Contract save(Contract contract) throws Exception{
+    public Contract save(Contract contract){
 
         try {
            return repository.save(contract);
 
         }catch (Exception e) {
-            throw new Exception(e.getLocalizedMessage());
+            throw new ApiRequestException(e.getLocalizedMessage());
         }
 
     }
 
     @Override
     @Transactional
-    public Contract update(Contract contract) throws Exception{
+    public Contract update(Contract contract){
         if(contract!=null && contract.getId()!=null){
             return repository.save(contract);
         }else{
-            throw new Exception("Contract can't be null");
+            throw new ApiRequestException("Contract can't be null");
         }
     }
 

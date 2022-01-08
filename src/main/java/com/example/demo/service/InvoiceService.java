@@ -9,11 +9,11 @@ import java.util.Optional;
 public interface InvoiceService {
 
     public Iterable<Invoice> findAll();
-    public Invoice save(Invoice invoice)throws Exception;
-    public Invoice update(Invoice invoice)throws Exception;
+    public Invoice save(Invoice invoice);
+    public Invoice update(Invoice invoice);
     public void delete(Long id);
     public Invoice findById(Long id);
     public boolean existById(Long id);
-    public Vendor getVendorByID(Long id)throws Exception;
+    public Vendor getVendorByID(Long id);
 
 }

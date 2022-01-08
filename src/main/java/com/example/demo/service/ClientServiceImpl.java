@@ -123,6 +123,13 @@ public class ClientServiceImpl implements ClientService{
         }catch(Exception e){
             throw new ApiRequestException("Something went wrong creating the contract");
         }
+        if(contract.getName().isBlank()|| contract.getName().isEmpty()){
+            throw new ApiRequestException("Check the contract name");
+        }if(contract.getMaxValue()<=0){
+            throw new ApiRequestException("Check the contract value, can't be less than 1");
+        }if(contract.getDescription().isBlank()|| contract.getDescription().isEmpty()){
+            throw new ApiRequestException("Check the contract description");
+        }
         try{
             Vendor vendor=vendorRepository.findById(vendorID).get();
             Client client=repository.findById(clientID).get();
