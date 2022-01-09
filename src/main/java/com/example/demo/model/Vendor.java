@@ -21,18 +21,24 @@ public class Vendor implements Serializable {
     @Column
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
+
     @Column
     private String name;
+
     @Column
     private double ratePerHour;
+
     @Column
     private String location;
+
     @Column
     private String dni;
+
     @Column
     private String description;
+
     @OneToMany(targetEntity=Contract.class, mappedBy="vendor")
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    @JsonIgnore
     private List<Contract>contracts;
 
     @OneToMany(targetEntity=Invoice.class, mappedBy="vendor")

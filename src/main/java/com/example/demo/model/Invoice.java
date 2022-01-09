@@ -22,29 +22,38 @@ public class Invoice implements Serializable {
     @Column
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
+
     @Column
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private double totalValue;
+
     @Column
     private int hoursWorked;
     //Change the way to numbers ddmmyyhms
+
     @Column
     @NotNull
     private Date createdDate;
+
     @Column
     private String status;
+
     @ManyToOne
     @JoinColumn(name ="vendor_id",nullable=false)
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    @JsonIgnore
     private Vendor vendor;
+
     @Column
     @NotBlank
     private String description;
+
     @Column
     private double materials;
+
     @Column
     @NotNull
     private String trackSerial;
+
     @Column
     @NotNull
     private Long contractID;

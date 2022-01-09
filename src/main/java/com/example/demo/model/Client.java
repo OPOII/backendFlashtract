@@ -36,8 +36,9 @@ public class Client implements Serializable {
     @NotNull
     @Column
     private int professionalCard;
+
     @OneToMany(targetEntity = Contract.class,mappedBy="client")
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    @JsonIgnore
     private List<Contract> contracts;
 
     public Client(){

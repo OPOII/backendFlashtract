@@ -23,29 +23,36 @@ public class Contract implements Serializable {
     @Column
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
+
     @Column
     @NotNull
     private String name;
+
     @Column
     @NotNull
     private double maxValue;
+
     @Column
     @NotNull
     private String description;
+
     @Column
     private String terms;
+
     @Column
     private Date createdDate;
+
     @Column
     private Date finishedDate;
 
     @ManyToOne
     @JoinColumn(name ="client_id")
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    @JsonIgnore
     private Client client;
+
     @ManyToOne
     @JoinColumn(name ="vendor_id")
-    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
+    @JsonIgnore
     private Vendor vendor;
 
     @ElementCollection
