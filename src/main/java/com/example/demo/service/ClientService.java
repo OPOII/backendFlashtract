@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public interface ClientService {
 
-    public Page<Client> findAll(Integer page, Integer size,Boolean enablePagination);
+    public List<Client> findAll();
     public Client save(Client client) ;
     public Client update(Client client);
     public void delete(Long id);

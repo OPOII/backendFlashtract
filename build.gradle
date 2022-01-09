@@ -18,10 +18,21 @@ dependencies {
     implementation 'org.projectlombok:lombok:1.18.18'
     runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	// https://mvnrepository.com/artifact/com.h2database/h2
+	testImplementation group: 'com.h2database', name: 'h2', version: '2.0.206'
+	// https://mvnrepository.com/artifact/org.testng/testng
+	//testImplementation group: 'org.testng', name: 'testng', version: '7.4.0'
+// https://mvnrepository.com/artifact/org.mockito/mockito-all
+	testImplementation group: 'org.mockito', name: 'mockito-core', version: '1.10.19'
+
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.6.2'
 	// https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui
 	implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.3'
+// https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin
+	//implementation group: 'org.apache.maven.plugins', name: 'maven-compiler-plugin', version: '3.8.1'
+
+
 
 }
 

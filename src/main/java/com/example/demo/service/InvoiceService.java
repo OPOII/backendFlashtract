@@ -4,11 +4,12 @@ import com.example.demo.model.Invoice;
 import com.example.demo.model.Vendor;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface InvoiceService {
 
-    public Iterable<Invoice> findAll();
+    public List<Invoice> findAll();
     public Invoice save(Invoice invoice);
     public Invoice update(Invoice invoice);
     public void delete(Long id);

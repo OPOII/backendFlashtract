@@ -30,12 +30,24 @@ public class ClientServiceImpl implements ClientService{
     @Autowired
     private IVendorRepository vendorRepository;
 
-
+    /**
+     * find all the clients created
+     * @return list of clients
+     */
     @Override
     @Transactional
-    public Page<Client> findAll(Integer page, Integer size,Boolean enablePagination) {
-        return repository.findAll(enablePagination? PageRequest.of(page,size): Pageable.unpaged());
+    public List<Client> findAll() {
+        return repository.findAll();
     }
+
+    /**
+     * The service validate the logic of the buissness in case that some wrong data filter in the object
+     * @Pre the client can't be null and the fields must have all the parameters
+     * can't have negative values the fields that have numeric attributes
+     * can't be null or in blank the alphanumeric fields
+     * @param client
+     * @return client
+     */
     @Override
     @Transactional
     public Client save(Client client)  {
@@ -53,15 +65,26 @@ public class ClientServiceImpl implements ClientService{
             return repository.save(client);
         }
     }
+
+    /**
+     * Update an existing client
+     * @param client
+     * @return
+     */
     @Override
     @Transactional
     public Client update(Client client)  {
         if(client.getId() !=null &&  repository.existsById(client.getId())){
-          return  repository.save(client);
+          return  repository.saveAndFlush(client);
         }else{
             throw new ApiRequestException("Something got wrong while updating client");
         }
     }
+
+    /**
+     * Delete a client by ID
+     * @param id
+     */
     @Override
     @Transactional
     public void delete(Long id) {
@@ -69,11 +92,23 @@ public class ClientServiceImpl implements ClientService{
             repository.deleteById(id);
         }
     }
+
+    /**
+     * Find a client by ID
+     * @param id
+     * @return
+     */
     @Override
     public Optional<Client> findById(Long id) {
        return repository.findById(id);
 
     }
+
+    /**
+     * Search the client and return it's contracts
+     * @param id
+     * @return List of contracts
+     */
     @Override
     @Transactional
     public List<Contract> getContracts(Long id) {
@@ -82,6 +117,12 @@ public class ClientServiceImpl implements ClientService{
         return actual.getContracts();
 
     }
+
+    /**
+     * Search an specific contract by the ID
+     * @param id
+     * @return contract
+     */
     @Override
     @Transactional
     public Contract searchContractById(Long id) {
@@ -91,6 +132,13 @@ public class ClientServiceImpl implements ClientService{
         return filter;
 
     }
+
+    /**
+     * Search a contract by a given date when was created
+     * @param idClient
+     * @param date
+     * @return contract
+     */
     @Override
     @Transactional
     public Contract searchContractByDate(Long idClient,Date date) {
@@ -100,12 +148,26 @@ public class ClientServiceImpl implements ClientService{
         return filter;
     }
 
+    /**
+     * Search if the client exist and return a boolean
+     * @param id
+     * @return boolean
+     */
     @Override
     @Transactional
     public boolean existById(Long id) {
         return repository.existsById(id);
     }
 
+    /**
+     * Create a contract based in the contract object and need the ids to search the actual client who is creating the contract
+     * and the vendor to view if exist. Also, the verifications are valid
+     * @Pre cotnract isn't null, vendor id and client id are different of 0
+     * @param contract
+     * @param vendorID
+     * @param clientID
+     * @return
+     */
     @Override
     @Transactional
     public Contract createContract(Contract contract, Long vendorID, Long clientID) {
@@ -129,6 +191,8 @@ public class ClientServiceImpl implements ClientService{
             throw new ApiRequestException("Check the contract value, can't be less than 1");
         }if(contract.getDescription().isBlank()|| contract.getDescription().isEmpty()){
             throw new ApiRequestException("Check the contract description");
+        }if(contract.getTerms().isBlank()|| contract.getTerms().isEmpty()){
+            throw new ApiRequestException("Check the contract description");
         }
         try{
             Vendor vendor=vendorRepository.findById(vendorID).get();
@@ -140,15 +204,19 @@ public class ClientServiceImpl implements ClientService{
             System.out.println("Contratos vendedor: "+vendor.getContracts().size());
             client.addContract(contract);
             System.out.println("Contratos cliente: "+client.getContracts().size());
-            /**
-             * Some problem here
-             */
+
             return contractRepository.save(contract);
         }catch (Exception e){
             throw new ApiRequestException("Something went wrong creating the contract");
         }
     }
 
+    /**
+     * Search the actual user and the contract that want to see, return the historial of the bills
+     * @param idClient
+     * @param idContract
+     * @return listf of string
+     */
     @Override
     public List<String> getHistoryBills(Long idClient, Long idContract) {
         Client client=null;

@@ -22,6 +22,7 @@ public class Invoice implements Serializable {
     @JsonIgnore
     private Long id;
     @Column
+    @JsonIgnore
     private double totalValue;
     @Column
     private int hoursWorked;

@@ -26,11 +26,8 @@ public class ClientController {
             return ResponseEntity.status(HttpStatus.CREATED).body(service.save(client));
     }
     @GetMapping
-    public ResponseEntity<Page<Client>> getAllClients(
-            @RequestParam(required = false, defaultValue = "0") Integer page,
-            @RequestParam(required = false, defaultValue = "10")Integer size,
-            @RequestParam(required = false, defaultValue = "false")Boolean enablePagination){
-        return ResponseEntity.ok(service.findAll(page,size,enablePagination));
+    public ResponseEntity<List<Client>> getAllClients(){
+        return ResponseEntity.ok(service.findAll());
     }
     @DeleteMapping(value="/delete/{id}")
     public ResponseEntity deleteClient(@PathVariable ("id") Long id){

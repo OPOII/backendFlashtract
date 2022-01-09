@@ -8,9 +8,6 @@ import com.example.demo.repository.IContractRepository;
 import com.example.demo.repository.IInvoiceRepository;
 import com.example.demo.repository.IVendorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +15,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,12 +32,22 @@ public class VendorServiceImpl implements VendorService {
     @Autowired
     private IContractRepository contractRepository;
 
+    /**
+     * Find all the vendors in the repository
+     * @return a list of all the vendors
+     */
     @Override
     @Transactional
-    public Page<Vendor> findAll(Integer page, Integer size, Boolean enablePagination) {
-        return repository.findAll(enablePagination? PageRequest.of(page,size): Pageable.unpaged());
+    public List<Vendor> findAll() {
+        return repository.findAll();
     }
 
+    /**
+     * Save all contract in the repository.
+     * This method validate that the fields of the vendor doesn´t have wrong data
+     * @param vendor
+     * @return Vendor
+     */
     @Override
     @Transactional
     public Vendor save(Vendor vendor){
@@ -63,16 +71,26 @@ public class VendorServiceImpl implements VendorService {
        }
     }
 
+    /**
+     * Update the vendor in the repository
+     *
+     * @param vendor
+     * @return vendor
+     */
     @Override
     @Transactional
     public Vendor update(Vendor vendor){
         try {
-            return repository.save(vendor);
+            return repository.saveAndFlush(vendor);
         }catch (Error e){
             throw  new ApiRequestException("Something get wrong");
         }
     }
 
+    /**
+     * Delete the vendor of the repository
+     * @param id
+     */
     @Override
     @Transactional
     public void delete(Long id) {
@@ -83,18 +101,34 @@ public class VendorServiceImpl implements VendorService {
         }
     }
 
+    /**
+     * Search the vendor by the id
+     * @param id
+     * @return vendor
+     */
     @Override
     @Transactional
     public Optional<Vendor> findById(Long id) {
         return repository.findById(id);
     }
 
+    /**
+     * Search if the vendor exist
+     * @param id
+     * @return boolean
+     */
     @Override
     @Transactional
     public boolean existById(Long id) {
         return repository.existsById(id);
     }
 
+    /**
+     * Create the invoice verifying that the invoice have correct data and that the vendor exist in the repository
+     * @param invoice
+     * @param idVendor
+     * @return invoice
+     */
     @Override
     @Transactional
     public Invoice createInvoice(Invoice invoice, Long idVendor){
@@ -106,6 +140,13 @@ public class VendorServiceImpl implements VendorService {
         }
     }
 
+    /**
+     * Create the method that send the invoice and discount the bill in the contract.
+     * Also, validate the fields and if the vendor, contract exist
+     * @param idInvoice
+     * @param idVendor
+     * @return
+     */
     @Override
     public String sendInvoice(Long idInvoice, Long idVendor){
         Invoice actualInvoice=null;
@@ -133,6 +174,13 @@ public class VendorServiceImpl implements VendorService {
         return actualInvoice.getStatus();
     }
 
+    /**
+     * This method is the continuation of the sendInvoice
+     * It wrapped in another method to not use the propagation and isolation to avoid a 500 status, and wrapped in a try catch
+     * @param actualInvoice
+     * @param pointerContract
+     * @return the status of the invoice
+     */
     private String sending(Invoice actualInvoice, Contract pointerContract) {
         actualInvoice.setStatus("Sumbmitted");
         String reporte="";
@@ -168,10 +216,11 @@ public class VendorServiceImpl implements VendorService {
         return reporte;
     }
 
-    @Transactional
-    public void addReports(Contract contract, String reportes){
-        contractRepository.getById(contract.getId()).getReports().add(reportes);
-    }
+    /**
+     * This method validate the invoice, the fields and if the vendor exist
+     * @param invoice
+     * @param idVendor
+     */
     public void create(Invoice invoice, Long idVendor){
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         Vendor vendor=null;

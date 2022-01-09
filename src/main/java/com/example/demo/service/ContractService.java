@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface ContractService {
 
-    public Page<Contract> findAll(Integer page, Integer size, Boolean enablePagination);
+    public List<Contract> findAll();
     public Contract save(Contract contract);
     public Contract update(Contract contract);
     public void delete(Long id);

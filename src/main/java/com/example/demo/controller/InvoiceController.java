@@ -4,13 +4,12 @@ import com.example.demo.model.Invoice;
 import com.example.demo.model.Vendor;
 import com.example.demo.service.InvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/invoice")
@@ -24,7 +23,7 @@ public class InvoiceController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(invoice));
     }
     @GetMapping
-    public ResponseEntity<Iterable<Invoice>> getAllClients(){
+    public ResponseEntity<List<Invoice>> getAllClients(){
         return ResponseEntity.ok(service.findAll());
     }
     @DeleteMapping(value="/delete/{id}")

@@ -38,6 +38,7 @@ public class Client implements Serializable {
     @OneToMany(targetEntity = Contract.class,mappedBy="client")
     @JsonIgnore
     private List<Contract> contracts;
+
     public Client(){
         this.contracts = new ArrayList<>();
     }

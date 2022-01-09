@@ -134,4 +134,11 @@ public class Contract implements Serializable {
         return maxValue;
     }
 
+    public String getTerms() {
+        return terms;
+    }
+
+    public void setTerms(String terms) {
+        this.terms = terms;
+    }
 }

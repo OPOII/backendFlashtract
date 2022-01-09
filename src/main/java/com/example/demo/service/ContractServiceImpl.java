@@ -4,9 +4,6 @@ import com.example.demo.exception.ApiRequestException;
 import com.example.demo.model.Contract;
 import com.example.demo.repository.IContractRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -16,15 +13,28 @@ import java.util.Optional;
 @Service
 public class ContractServiceImpl implements ContractService{
 
+    /**
+     * Contract repository
+     */
     @Autowired
     private IContractRepository repository;
 
+    /**
+     * Get all the contracts in the repository
+     * @return
+     */
     @Override
     @Transactional
-    public Page<Contract> findAll(Integer page, Integer size, Boolean enablePagination) {
-        return repository.findAll(enablePagination? PageRequest.of(page,size): Pageable.unpaged());
+    public List<Contract> findAll() {
+        return repository.findAll();
     }
 
+    /**
+     * Save the contract
+     * @Pre contract is not null and doesn't have bad fields
+     * @param contract
+     * @return
+     */
     @Override
     @Transactional
     public Contract save(Contract contract){
@@ -38,16 +48,25 @@ public class ContractServiceImpl implements ContractService{
 
     }
 
+    /**
+     * Update the contract
+     * @param contract
+     * @return contract
+     */
     @Override
     @Transactional
     public Contract update(Contract contract){
         if(contract!=null && contract.getId()!=null){
-            return repository.save(contract);
+            return repository.saveAndFlush(contract);
         }else{
             throw new ApiRequestException("Contract can't be null");
         }
     }
 
+    /**
+     * Delete a contract by the id
+     * @param id
+     */
     @Override
     @Transactional
     public void delete(Long id) {
@@ -56,6 +75,11 @@ public class ContractServiceImpl implements ContractService{
         }
     }
 
+    /**
+     * Find the contract by id
+     * @param id
+     * @return contract
+     */
     @Override
     @Transactional
     public Optional<Contract> findById(Long id) {
@@ -63,6 +87,11 @@ public class ContractServiceImpl implements ContractService{
         return contract;
     }
 
+    /**
+     * Get the list of the reports of the contracts
+     * @param id
+     * @return list of strings
+     */
     @Override
     @Transactional
     public List<String> getReports(Long id) {
@@ -70,19 +99,16 @@ public class ContractServiceImpl implements ContractService{
         return contract.get().getReports();
     }
 
+    /**
+     * Search if the Contract exist by the id
+     * @param id
+     * @return boolean with the answer
+     */
     @Override
     @Transactional
     public boolean existById(Long id) {
         return repository.existsById(id);
     }
 
-    public boolean validateContractData(Contract contract){
-        boolean validate=false;
-        if(Double.valueOf(contract.getMaxValue())!=null && contract.getMaxValue()>0 &&
-        contract.getDescription()!=null && !contract.getDescription().isEmpty() && contract.getCreatedDate()!=null
-                && contract.getFinishedDate()!=null){
-        validate=true;
-        }
-        return validate;
-    }
+
 }
