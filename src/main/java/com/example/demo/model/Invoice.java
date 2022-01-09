@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -19,10 +20,10 @@ public class Invoice implements Serializable {
     @SequenceGenerator(name="INVOICE_ID_GENERATOR", sequenceName="INVOICE_SEQ")
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "INVOICE_ID_GENERATOR")
     @Column
-    @JsonIgnore
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
     @Column
-    @JsonIgnore
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private double totalValue;
     @Column
     private int hoursWorked;
@@ -34,7 +35,7 @@ public class Invoice implements Serializable {
     private String status;
     @ManyToOne
     @JoinColumn(name ="vendor_id",nullable=false)
-    @JsonIgnore
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Vendor vendor;
     @Column
     @NotBlank
@@ -133,4 +134,5 @@ public class Invoice implements Serializable {
     public void setContractID(Long contractID) {
         this.contractID = contractID;
     }
+
 }

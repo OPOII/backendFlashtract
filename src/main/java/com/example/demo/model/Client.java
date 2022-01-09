@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -17,7 +18,7 @@ public class Client implements Serializable {
     @SequenceGenerator(name="CLIENT_ID_GENERATOR", sequenceName="CLIENT_SEQ")
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "CLIENT_ID_GENERATOR")
     @Column
-    @JsonIgnore
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
 
     @NotNull
@@ -36,7 +37,7 @@ public class Client implements Serializable {
     @Column
     private int professionalCard;
     @OneToMany(targetEntity = Contract.class,mappedBy="client")
-    @JsonIgnore
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private List<Contract> contracts;
 
     public Client(){
@@ -99,4 +100,5 @@ public class Client implements Serializable {
     public void setProfessionalCard(int professionalCard) {
         this.professionalCard = professionalCard;
     }
+
 }

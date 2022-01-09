@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -20,7 +21,7 @@ public class Contract implements Serializable {
     @SequenceGenerator(name="CONTRACT_ID_GENERATOR", sequenceName="CONTRACT_SEQ")
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "CONTRACT_ID_GENERATOR")
     @Column
-    @JsonIgnore
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
     @Column
     @NotNull
@@ -40,16 +41,16 @@ public class Contract implements Serializable {
 
     @ManyToOne
     @JoinColumn(name ="client_id")
-    @JsonIgnore
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Client client;
     @ManyToOne
     @JoinColumn(name ="vendor_id")
-    @JsonIgnore
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Vendor vendor;
 
     @ElementCollection
     @Column(columnDefinition="text")
-    @JsonIgnore
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private List<String>reports=new ArrayList<String>();
 
     public Contract(){
@@ -141,4 +142,5 @@ public class Contract implements Serializable {
     public void setTerms(String terms) {
         this.terms = terms;
     }
+
 }

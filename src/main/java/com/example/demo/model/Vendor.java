@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -18,7 +19,7 @@ public class Vendor implements Serializable {
     @SequenceGenerator(name="VENDOR_ID_GENERATOR", sequenceName="VENDOR_SEQ")
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "VENDOR_ID_GENERATOR")
     @Column
-    @JsonIgnore
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
     @Column
     private String name;
@@ -31,7 +32,7 @@ public class Vendor implements Serializable {
     @Column
     private String description;
     @OneToMany(targetEntity=Contract.class, mappedBy="vendor")
-    @JsonIgnore
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private List<Contract>contracts;
 
     @OneToMany(targetEntity=Invoice.class, mappedBy="vendor")
@@ -117,6 +118,7 @@ public class Vendor implements Serializable {
         invoice.setVendor(this);
         return invoice;
     }
+
 }
 
 
