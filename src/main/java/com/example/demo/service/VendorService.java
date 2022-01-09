@@ -12,7 +12,7 @@ public interface VendorService {
     public Vendor save(Vendor vendor);
     public Vendor update(Vendor vendor);
     public void delete(Long id);
-    public Optional<Vendor> findById(Long id);
+    public Vendor findById(Long id);
     public boolean existById(Long id);
     public Invoice createInvoice(Invoice invoice, Long idVendor);
     public String sendInvoice(Long idInvoice, Long idVendor);

@@ -37,7 +37,7 @@ public class VendorController {
     }
 
     @GetMapping(value="/{id}")
-    public ResponseEntity<Optional<Vendor>> findById(@PathVariable ("id") Long id){
+    public ResponseEntity<Vendor> findById(@PathVariable ("id") Long id){
         service.findById(id);
         ResponseEntity.ok(!service.existById(id));
         return ResponseEntity.status(HttpStatus.OK).body(service.findById(id));

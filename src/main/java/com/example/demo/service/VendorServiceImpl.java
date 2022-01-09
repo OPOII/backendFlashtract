@@ -108,8 +108,8 @@ public class VendorServiceImpl implements VendorService {
      */
     @Override
     @Transactional
-    public Optional<Vendor> findById(Long id) {
-        return repository.findById(id);
+    public Vendor findById(Long id) {
+        return repository.findById(id).get();
     }
 
     /**

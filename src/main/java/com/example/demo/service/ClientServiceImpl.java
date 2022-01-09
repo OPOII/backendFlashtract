@@ -176,14 +176,14 @@ public class ClientServiceImpl implements ClientService{
                 throw new ApiRequestException("The vendor you are trying to get doesn't exist, check that is created");
             }
         }catch(Exception e){
-            throw new ApiRequestException("Something went wrong creating the contract");
+            throw new ApiRequestException(e.getLocalizedMessage());
         }
         try{
             if(repository.existsById(clientID)==false) {
                 throw new ApiRequestException("The client you are trying to get doesn't exist, check that is created");
             }
         }catch(Exception e){
-            throw new ApiRequestException("Something went wrong creating the contract");
+            throw new ApiRequestException(e.getLocalizedMessage());
         }
         if(contract.getName().isBlank()|| contract.getName().isEmpty()){
             throw new ApiRequestException("Check the contract name");
